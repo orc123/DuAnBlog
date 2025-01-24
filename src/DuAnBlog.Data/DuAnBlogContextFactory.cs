@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 
 namespace DuAnBlog.Data;
-public class TeduBlogContextFactory : IDesignTimeDbContextFactory<DuAnBlogContext>
+public class DuAnBlogContextFactory : IDesignTimeDbContextFactory<DuAnBlogContext>
 {
     public DuAnBlogContext CreateDbContext(string[] args)
     {

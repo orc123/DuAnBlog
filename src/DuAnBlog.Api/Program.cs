@@ -1,3 +1,4 @@
+using DuAnBlog.Api;
 using DuAnBlog.Core.Domain.Identity;
 using DuAnBlog.Data;
 using Microsoft.AspNetCore.Identity;
@@ -56,5 +57,8 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+//Seeding Database
+app.MigrateDatabase();
 
 app.Run();
