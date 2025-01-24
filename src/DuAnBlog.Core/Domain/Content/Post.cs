@@ -28,7 +28,6 @@ public class Post
     [MaxLength(500)]
     public string? Thumbnail { get; set; }
 
-    [MaxLength(500)]
     public string? Content { get; set; }
 
     public Guid AuthorUserId { get; set; }
