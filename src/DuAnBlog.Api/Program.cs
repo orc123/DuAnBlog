@@ -1,5 +1,6 @@
 using DuAnBlog.Api;
 using DuAnBlog.Core.Domain.Identity;
+using DuAnBlog.Core.Models.Content;
 using DuAnBlog.Core.Repositories;
 using DuAnBlog.Core.SeedWorks;
 using DuAnBlog.Data;
@@ -58,6 +59,8 @@ foreach (var service in services)
         builder.Services.Add(new ServiceDescriptor(directInterface, service, ServiceLifetime.Scoped));
     }
 }
+
+builder.Services.AddAutoMapper(typeof(PostInListDto));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
