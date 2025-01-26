@@ -2,7 +2,7 @@
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace DuAnBlog.Api;
+namespace DuAnBlog.Api.Filters;
 
 public class SwaggerNullableParameterFilter : IParameterFilter
 {

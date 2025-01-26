@@ -1,4 +1,4 @@
-﻿namespace DuAnBlog.Data.SeedWorks.Contants;
+﻿namespace DuAnBlog.Core.SeedWorks.Contants;
 
 public class UserClaims
 {
