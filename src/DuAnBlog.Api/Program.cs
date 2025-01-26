@@ -1,4 +1,6 @@
 using DuAnBlog.Api;
+using DuAnBlog.Api.Services;
+using DuAnBlog.Core.ConfigOptions;
 using DuAnBlog.Core.Domain.Identity;
 using DuAnBlog.Core.Models.Content;
 using DuAnBlog.Core.Repositories;
@@ -63,6 +65,12 @@ foreach (var service in services)
 }
 
 builder.Services.AddAutoMapper(typeof(PostInListDto));
+
+builder.Services.Configure<JwtTokenSettings>(configuration.GetSection("JwtTokenSettings"));
+builder.Services.AddScoped<SignInManager<AppUser>, SignInManager<AppUser>>();
+builder.Services.AddScoped<UserManager<AppUser>, UserManager<AppUser>>();
+builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<RoleManager<AppRole>, RoleManager<AppRole>>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
