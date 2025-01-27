@@ -6,7 +6,9 @@ import {
   AuthenticatedResult,
 } from '../../../api/admin-api.service.generated';
 import { AlertService } from 'src/app/shared/services/alert.service';
+import { UrlConstants } from 'src/app/shared/constants/url.constant';
 import { Router } from '@angular/router';
+import { TokenStorageService } from 'src/app/shared/services/token.storage.service';
 
 @Component({
   selector: 'app-login',
@@ -19,7 +21,8 @@ export class LoginComponent {
     private fb: FormBuilder,
     private authClient: AdminApiAuthApiClient,
     private alertService: AlertService,
-    private router: Router
+    private router: Router,
+    private tokenStorageService: TokenStorageService
   ) {
     this.loginForm = this.fb.group({
       username: ['', [Validators.required, Validators.email]],
@@ -35,9 +38,10 @@ export class LoginComponent {
     this.authClient.login(loginRequest).subscribe({
       next: (response: AuthenticatedResult) => {
         // Save token and refresh token info to local storage
-        //localStorage.setItem('token', response.t);
-        //localStorage.setItem('refreshToken', response.refreshToken);
-        this.router.navigate(['/dashboard']);
+        this.tokenStorageService.saveToken(response.token);
+        this.tokenStorageService.saveRefreshToken(response.refreshToken);
+        this.tokenStorageService.saveUser(response);
+        this.router.navigate([UrlConstants.HOME]);
       },
       error: (error: any) => {
         console.error(error);
