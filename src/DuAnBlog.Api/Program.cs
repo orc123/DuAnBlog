@@ -21,6 +21,19 @@ var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 var connectionString = configuration.GetConnectionString("DefaultConnection");
 
+var DuanCorsPolicy = "DuAnBlogCorsPolicy";
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(DuanCorsPolicy, builder =>
+    {
+        builder.WithOrigins(configuration["AllowedOrigins"])
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
+});
+
 builder.Services.AddDbContext<DuAnBlogContext>(options =>
                 options.UseSqlServer(connectionString));
 
@@ -105,6 +118,8 @@ if (app.Environment.IsDevelopment())
         c.DisplayRequestDuration();
     });
 }
+
+app.UseCors(DuanCorsPolicy);
 
 app.UseHttpsRedirection();
 
