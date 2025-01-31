@@ -8,7 +8,7 @@ import {
 import { AlertService } from '../../../shared/services/alert.service';
 import { UrlConstants } from '../../../shared/constants/url.constant';
 import { Router } from '@angular/router';
-import { TokenStorageService } from '../../../shared/services/token.storage.service';
+import { TokenStorageService } from '../../../shared/services/token-storage.service';
 import { Subject, takeUntil } from 'rxjs';
 
 @Component({

@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { TokenStorageService } from '../../../shared/services/token.storage.service';
+import { TokenStorageService } from '../../../shared/services/token-storage.service';
 import { UrlConstants } from '../../../shared/constants/url.constant';
 import { ClassToggleService, HeaderComponent } from '@coreui/angular';
 
