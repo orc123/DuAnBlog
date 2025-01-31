@@ -9,10 +9,13 @@ using DuAnBlog.Core.SeedWorks;
 using DuAnBlog.Data;
 using DuAnBlog.Data.Repositories;
 using DuAnBlog.Data.SeedWorks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Reflection;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -105,6 +108,24 @@ builder.Services.AddSwaggerGen(c =>
     c.ParameterFilter<SwaggerNullableParameterFilter>();
 });
 
+builder.Services.AddAuthentication(o =>
+{
+    o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(cfg =>
+{
+    cfg.RequireHttpsMetadata = false;
+    cfg.SaveToken = true;
+    cfg.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateLifetime = true,
+        ClockSkew = TimeSpan.FromSeconds(0),
+        ValidIssuer = configuration["JwtTokenSettings:Issuer"],
+        ValidAudience = configuration["JwtTokenSettings:Issuer"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtTokenSettings:Key"]))
+    };
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -122,6 +143,8 @@ if (app.Environment.IsDevelopment())
 app.UseCors(DuanCorsPolicy);
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

@@ -2,21 +2,19 @@
 using DuAnBlog.Core.Domain.Content;
 using DuAnBlog.Core.Models.Content;
 using DuAnBlog.Core.SeedWorks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DuAnBlog.Api.Controllers.AdminApi;
 
 [Route("api/admin/[controller]")]
 [ApiController]
-public class PostController: ControllerBase
+[Authorize]
+public class PostController(IUnitOfWork unitOfWork, IMapper mapper) : ControllerBase
 {
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IMapper _mapper;
-    public PostController(IUnitOfWork unitOfWork, IMapper mapper)
-    {
-        _unitOfWork = unitOfWork;
-        _mapper = mapper;
-    }
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly IMapper _mapper = mapper;
+
     [HttpPost]
     public async Task<IActionResult> CreatePost([FromBody] CreateUpdatePostRequest request)
     {
