@@ -1,4 +1,5 @@
 using DuAnBlog.Api;
+using DuAnBlog.Api.Authorization;
 using DuAnBlog.Api.Filters;
 using DuAnBlog.Api.Services;
 using DuAnBlog.Core.ConfigOptions;
@@ -10,6 +11,7 @@ using DuAnBlog.Data;
 using DuAnBlog.Data.Repositories;
 using DuAnBlog.Data.SeedWorks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -25,6 +27,8 @@ var configuration = builder.Configuration;
 var connectionString = configuration.GetConnectionString("DefaultConnection");
 
 var DuanCorsPolicy = "DuAnBlogCorsPolicy";
+builder.Services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
+builder.Services.AddScoped<IAuthorizationHandler, PermissionAuthorizationHandler>();
 
 builder.Services.AddCors(options =>
 {
