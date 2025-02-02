@@ -14,6 +14,9 @@ import { SharedModule } from 'primeng/api';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
+import { KeyFilterModule } from 'primeng/keyfilter';
+import { RoleDetailComponent } from './roles/role-detail/role-detail.component';
+import { DuanSharedModule } from '../../shared/modules/duan-shared.module';
 
 @NgModule({
   imports: [
@@ -28,8 +31,11 @@ import { InputTextModule } from 'primeng/inputtext';
     CheckboxModule,
     ButtonModule,
     InputTextModule,
+    KeyFilterModule,
     SharedModule,
+    ReactiveFormsModule,
+    DuanSharedModule,
   ],
-  declarations: [UserComponent, RolesComponent],
+  declarations: [UserComponent, RolesComponent, RoleDetailComponent],
 })
 export class SystemModule {}
