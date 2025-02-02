@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import {
   AdminApiRoleApiClient,
+  PermissionDto,
   RoleDto,
   RoleDtoPagedResult,
 } from '../../../api/admin-api.service.generated';
@@ -10,6 +11,7 @@ import { AlertService } from '../../../shared/services/alert.service';
 import { ConfirmationService } from 'primeng/api';
 import { RoleDetailComponent } from './role-detail/role-detail.component';
 import { MessageConstants } from '../../../shared/constants/message-constant';
+import { PermissionGrantComponent } from './permission-grant/permission-grant.component';
 
 @Component({
   selector: 'app-roles',
@@ -73,7 +75,26 @@ export class RolesComponent implements OnInit, OnDestroy {
     }
   }
 
-  showPermissionModal(id: string, name: string) {}
+  showPermissionModal(id: string, name: string) {
+    const ref = this.dialogService.open(PermissionGrantComponent, {
+      data: {
+        id: id,
+      },
+      header: name,
+      width: '70%',
+    });
+    const dialogRef = this.dialogService.dialogComponentRefMap.get(ref);
+    const dynamicComponent = dialogRef?.instance as DynamicDialogComponent;
+    const ariaLabelledBy = dynamicComponent.getAriaLabelledBy();
+    dynamicComponent.getAriaLabelledBy = () => ariaLabelledBy;
+    ref.onClose.subscribe((data: RoleDto) => {
+      if (data) {
+        this.alertService.showSuccess(MessageConstants.UPDATED_OK_MSG);
+        this.selectedItems = [];
+        this.loadData();
+      }
+    });
+  }
   showEditModal() {
     if (this.selectedItems.length == 0) {
       this.alertService.showError(MessageConstants.NOT_CHOOSE_ANY_RECORD);

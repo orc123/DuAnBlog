@@ -17,6 +17,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { KeyFilterModule } from 'primeng/keyfilter';
 import { RoleDetailComponent } from './roles/role-detail/role-detail.component';
 import { DuanSharedModule } from '../../shared/modules/duan-shared.module';
+import { PermissionGrantComponent } from './roles/permission-grant/permission-grant.component';
 
 @NgModule({
   imports: [
@@ -36,6 +37,6 @@ import { DuanSharedModule } from '../../shared/modules/duan-shared.module';
     ReactiveFormsModule,
     DuanSharedModule,
   ],
-  declarations: [UserComponent, RolesComponent, RoleDetailComponent],
+  declarations: [UserComponent, RolesComponent, RoleDetailComponent, PermissionGrantComponent],
 })
 export class SystemModule {}
