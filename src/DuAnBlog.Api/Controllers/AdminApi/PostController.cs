@@ -51,7 +51,7 @@ public class PostController(IUnitOfWork unitOfWork, IMapper mapper) : Controller
     }
 
     [HttpGet()]
-    [Route("id")]
+    [Route("{id}")]
     public async Task<IActionResult> GetPostById(Guid id)
     {
         var post = await _unitOfWork.Posts.GetByIdAsync(id);

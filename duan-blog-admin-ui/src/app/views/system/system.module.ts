@@ -18,6 +18,13 @@ import { KeyFilterModule } from 'primeng/keyfilter';
 import { RoleDetailComponent } from './roles/role-detail/role-detail.component';
 import { DuanSharedModule } from '../../shared/modules/duan-shared.module';
 import { PermissionGrantComponent } from './roles/permission-grant/permission-grant.component';
+import { BadgeModule } from 'primeng/badge';
+import { PickListModule } from 'primeng/picklist';
+import { ImageModule } from 'primeng/image';
+import { UserDetailComponent } from './users/user-detail/user-detail.component';
+import { SetPasswordComponent } from './users/set-password/set-password.component';
+import { RoleAssignComponent } from './users/role-assign/role-assign.component';
+import { ChangeEmailComponent } from './users/change-email/change-email.component';
 
 @NgModule({
   imports: [
@@ -36,7 +43,19 @@ import { PermissionGrantComponent } from './roles/permission-grant/permission-gr
     SharedModule,
     ReactiveFormsModule,
     DuanSharedModule,
+    BadgeModule,
+    PickListModule,
+    ImageModule,
   ],
-  declarations: [UserComponent, RolesComponent, RoleDetailComponent, PermissionGrantComponent],
+  declarations: [
+    UserComponent,
+    RolesComponent,
+    RoleDetailComponent,
+    PermissionGrantComponent,
+    UserDetailComponent,
+    SetPasswordComponent,
+    RoleAssignComponent,
+    ChangeEmailComponent,
+  ],
 })
 export class SystemModule {}
