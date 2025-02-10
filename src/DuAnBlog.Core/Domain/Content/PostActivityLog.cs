@@ -16,4 +16,6 @@ public class PostActivityLog
     [MaxLength(500)]
     public string? Note { get; set; }
     public Guid UserId { get; set; }
+    [MaxLength(250)]
+    public string UserName { get; set; }
 }

@@ -26,4 +26,9 @@ public class AppUser : IdentityUser<Guid>
     public DateTime? VipExpireDate { get; set; }
     public DateTime? LastLoginDate { get; set; }
     public double Balance { get; set; }
+
+    public string GetFullName()
+    {
+        return this.FirstName + " " + this.LastName;
+    }
 }

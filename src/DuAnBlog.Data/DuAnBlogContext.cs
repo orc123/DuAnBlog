@@ -1,5 +1,6 @@
 ﻿using DuAnBlog.Core.Domain.Content;
 using DuAnBlog.Core.Domain.Identity;
+using DuAnBlog.Core.SeedWorks.Contants;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -27,16 +28,15 @@ public class DuAnBlogContext : IdentityDbContext<AppUser, AppRole, Guid>
         builder.Entity<IdentityUserRole<Guid>>().ToTable("AppUserRoles").HasKey(x => new { x.RoleId, x.UserId});
         builder.Entity<IdentityUserToken<Guid>>().ToTable("AppUserTokens").HasKey(x => x.UserId);
     }
-
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         var entries = ChangeTracker
-              .Entries()
-              .Where(e => e.State == EntityState.Added);
+           .Entries()
+           .Where(e => e.State == EntityState.Added);
 
         foreach (var entityEntry in entries)
         {
-            var dateCreatedProp = entityEntry.Entity.GetType().GetProperty("DateCreated");
+            var dateCreatedProp = entityEntry.Entity.GetType().GetProperty(SystemConsts.DateCreatedField);
             if (entityEntry.State == EntityState.Added
                 && dateCreatedProp != null)
             {

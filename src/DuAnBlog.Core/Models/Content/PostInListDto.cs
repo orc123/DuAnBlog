@@ -17,6 +17,11 @@ public class PostInListDto
     public int ViewCount { get; set; }
     public DateTime DateCreated { get; set; }
 
+    public required string CategoryName { get; set; }
+    public required string CategorySlug { get; set; }
+
+    public string AuthorUserName { get; set; }
+    public string AuthorName { get; set; }
     public class AutoMapperProfile : Profile
     {
         public AutoMapperProfile()

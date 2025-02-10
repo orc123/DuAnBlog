@@ -16,15 +16,17 @@ namespace DuAnBlog.Api.Controllers.AdminApi;
 [ApiController]
 public class UserController(IMapper mapper, UserManager<AppUser> userManager) : ControllerBase
 {
+    private readonly IMapper _mapper = mapper;
+    private readonly UserManager<AppUser> _userManager = userManager;
     [HttpGet("{id}")]
     [Authorize(Users.View)]
     public async Task<ActionResult<UserDto>> GetUserById(Guid id)
     {
-        var user = await userManager.FindByIdAsync(id.ToString());
+        var user = await _userManager.FindByIdAsync(id.ToString());
         if (user == null) return NotFound();
 
-        var userDto = mapper.Map<AppUser, UserDto>(user);
-        var roles = await userManager.GetRolesAsync(user);
+        var userDto = _mapper.Map<AppUser, UserDto>(user);
+        var roles = await _userManager.GetRolesAsync(user);
         userDto.Roles = roles;
 
         return Ok(userDto);
@@ -34,7 +36,7 @@ public class UserController(IMapper mapper, UserManager<AppUser> userManager) : 
     [Authorize(Users.View)]
     public async Task<ActionResult<PagedResult<UserDto>>> GetAllUsersPaging(string? keyword, int pageIndex = 1, int pageSize = 10)
     {
-        var query = userManager.Users;
+        var query = _userManager.Users;
         if (!string.IsNullOrEmpty(keyword))
         {
             query = query.Where(x => x.FirstName.Contains(keyword) || 
@@ -49,7 +51,7 @@ public class UserController(IMapper mapper, UserManager<AppUser> userManager) : 
 
         var pageResponse = new PagedResult<UserDto>()
         {
-            Results = await mapper.ProjectTo<UserDto>(query).ToListAsync(),
+            Results = await _mapper.ProjectTo<UserDto>(query).ToListAsync(),
             CurrentPage = pageIndex,
             RowCount = totalRow,
             PageSize = pageSize
@@ -62,16 +64,16 @@ public class UserController(IMapper mapper, UserManager<AppUser> userManager) : 
     [Authorize(Users.Create)]
     public async Task<IActionResult> CreateUser([FromBody] CreateUserRequest request)
     {
-        if ((await userManager.FindByNameAsync(request.UserName) != null))
+        if ((await _userManager.FindByNameAsync(request.UserName) != null))
         {
             return BadRequest();
         }
-        if ((await userManager.FindByEmailAsync(request.Email) != null))
+        if ((await _userManager.FindByEmailAsync(request.Email) != null))
         {
             return BadRequest();
         }
-        var user = mapper.Map<CreateUserRequest, AppUser>(request);
-        var result = await userManager.CreateAsync(user, request.Password);
+        var user = _mapper.Map<CreateUserRequest, AppUser>(request);
+        var result = await _userManager.CreateAsync(user, request.Password);
         if (result.Succeeded)
         {
             return Ok();
@@ -84,13 +86,13 @@ public class UserController(IMapper mapper, UserManager<AppUser> userManager) : 
     [Authorize(Users.Edit)]
     public async Task<IActionResult> UpdateUser(Guid id,[FromBody] UpdateUserRequest request)
     {
-       var user = await userManager.FindByIdAsync(id.ToString());
+       var user = await _userManager.FindByIdAsync(id.ToString());
         if (user == null)
         {
             return BadRequest();
         }
-        mapper.Map(request, user);
-        var result = await userManager.UpdateAsync(user);
+        _mapper.Map(request, user);
+        var result = await _userManager.UpdateAsync(user);
 
         if (result.Succeeded)
         {
@@ -103,12 +105,12 @@ public class UserController(IMapper mapper, UserManager<AppUser> userManager) : 
     [ValidateModel]
     public async Task<IActionResult> ChangeMyPassword([FromBody] ChangeMyPasswordRequest request)
     {
-        var user = await userManager.FindByIdAsync(User.GetUserId().ToString());
+        var user = await _userManager.FindByIdAsync(User.GetUserId().ToString());
         if (user == null)
         {
             return NotFound();
         }
-        var result = await userManager.ChangePasswordAsync(user, request.OldPassword, request.NewPassword);
+        var result = await _userManager.ChangePasswordAsync(user, request.OldPassword, request.NewPassword);
         if (result.Succeeded)
         {
             return Ok();
@@ -122,12 +124,12 @@ public class UserController(IMapper mapper, UserManager<AppUser> userManager) : 
     {
         foreach (var id in ids)
         {
-            var user = await userManager.FindByIdAsync(id.ToString());
+            var user = await _userManager.FindByIdAsync(id.ToString());
             if (user == null)
             {
                 return NotFound();
             }
-            await userManager.DeleteAsync(user);
+            await _userManager.DeleteAsync(user);
         }
         return Ok();
     }
@@ -137,14 +139,14 @@ public class UserController(IMapper mapper, UserManager<AppUser> userManager) : 
     [Authorize(Users.Edit)]
     public async Task<IActionResult> SetPassword(Guid id, [FromBody] SetPasswordRequest request)
     {
-        var user = await userManager.FindByIdAsync(id.ToString());
+        var user = await _userManager.FindByIdAsync(id.ToString());
         if (user == null)
         {
             return BadRequest();
         }
 
-        user.PasswordHash = userManager.PasswordHasher.HashPassword(user, request.NewPassword);
-        var result = await userManager.UpdateAsync(user);
+        user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, request.NewPassword);
+        var result = await _userManager.UpdateAsync(user);
 
         if (result.Succeeded)
         {
@@ -158,14 +160,14 @@ public class UserController(IMapper mapper, UserManager<AppUser> userManager) : 
     [Authorize(Users.Edit)]
     public async Task<IActionResult> ChangeEmail(Guid id, [FromBody] ChangeEmailRequest request)
     {
-        var user = await userManager.FindByIdAsync(id.ToString());
+        var user = await _userManager.FindByIdAsync(id.ToString());
         if (user == null)
         {
             return BadRequest();
         }
 
-        var token = await userManager.GenerateChangeEmailTokenAsync(user, request.Email);
-        var result = await userManager.ChangeEmailAsync(user, request.Email, token);
+        var token = await _userManager.GenerateChangeEmailTokenAsync(user, request.Email);
+        var result = await _userManager.ChangeEmailAsync(user, request.Email, token);
 
         if (result.Succeeded)
         {
@@ -178,14 +180,14 @@ public class UserController(IMapper mapper, UserManager<AppUser> userManager) : 
     [Authorize(Permissions.Users.Edit)]
     public async Task<IActionResult> AssignRolesToUser(string id, [FromBody] string[] roles)
     {
-        var user = await userManager.FindByIdAsync(id);
+        var user = await _userManager.FindByIdAsync(id);
         if (user == null)
         {
             return NotFound();
         }
-        var currentRoles = await userManager.GetRolesAsync(user);
-        var removedResult = await userManager.RemoveFromRolesAsync(user, currentRoles);
-        var addedResult = await userManager.AddToRolesAsync(user, roles);
+        var currentRoles = await _userManager.GetRolesAsync(user);
+        var removedResult = await _userManager.RemoveFromRolesAsync(user, currentRoles);
+        var addedResult = await _userManager.AddToRolesAsync(user, roles);
         if (!addedResult.Succeeded || !removedResult.Succeeded)
         {
             List<IdentityError> addedErrorList = addedResult.Errors.ToList();
