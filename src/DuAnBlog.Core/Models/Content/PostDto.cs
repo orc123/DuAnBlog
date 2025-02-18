@@ -16,7 +16,6 @@ public class PostDto : PostInListDto
     public DateTime? DateModified { get; set; }
     public bool IsPaid { get; set; }
     public double RoyaltyAmount { get; set; }
-    //public PostStatus Status { get; set; }
     public class AutoMapperProfile : Profile
     {
         public AutoMapperProfile()

@@ -22,6 +22,9 @@ public class PostInListDto
 
     public string AuthorUserName { get; set; }
     public string AuthorName { get; set; }
+
+    public PostStatus Status { get; set; }
+
     public class AutoMapperProfile : Profile
     {
         public AutoMapperProfile()

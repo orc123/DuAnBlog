@@ -2957,7 +2957,7 @@ export class CreateUpdatePostRequest implements ICreateUpdatePostRequest {
     categoryId?: string;
     content?: string | undefined;
     source?: string | undefined;
-    tags?: string[] | undefined;
+    tags?: string | undefined;
     seoDescription?: string | undefined;
 
     constructor(data?: ICreateUpdatePostRequest) {
@@ -2978,11 +2978,7 @@ export class CreateUpdatePostRequest implements ICreateUpdatePostRequest {
             this.categoryId = _data["categoryId"];
             this.content = _data["content"];
             this.source = _data["source"];
-            if (Array.isArray(_data["tags"])) {
-                this.tags = [] as any;
-                for (let item of _data["tags"])
-                    this.tags!.push(item);
-            }
+            this.tags = _data["tags"];
             this.seoDescription = _data["seoDescription"];
         }
     }
@@ -3003,11 +2999,7 @@ export class CreateUpdatePostRequest implements ICreateUpdatePostRequest {
         data["categoryId"] = this.categoryId;
         data["content"] = this.content;
         data["source"] = this.source;
-        if (Array.isArray(this.tags)) {
-            data["tags"] = [];
-            for (let item of this.tags)
-                data["tags"].push(item);
-        }
+        data["tags"] = this.tags;
         data["seoDescription"] = this.seoDescription;
         return data;
     }
@@ -3021,7 +3013,7 @@ export interface ICreateUpdatePostRequest {
     categoryId?: string;
     content?: string | undefined;
     source?: string | undefined;
-    tags?: string[] | undefined;
+    tags?: string | undefined;
     seoDescription?: string | undefined;
 }
 
@@ -3493,6 +3485,7 @@ export class PostDto implements IPostDto {
     categorySlug!: string | undefined;
     authorUserName?: string | undefined;
     authorName?: string | undefined;
+    status?: PostStatus;
     categoryId?: string;
     content?: string | undefined;
     authorUserId?: string;
@@ -3525,6 +3518,7 @@ export class PostDto implements IPostDto {
             this.categorySlug = _data["categorySlug"];
             this.authorUserName = _data["authorUserName"];
             this.authorName = _data["authorName"];
+            this.status = _data["status"];
             this.categoryId = _data["categoryId"];
             this.content = _data["content"];
             this.authorUserId = _data["authorUserId"];
@@ -3557,6 +3551,7 @@ export class PostDto implements IPostDto {
         data["categorySlug"] = this.categorySlug;
         data["authorUserName"] = this.authorUserName;
         data["authorName"] = this.authorName;
+        data["status"] = this.status;
         data["categoryId"] = this.categoryId;
         data["content"] = this.content;
         data["authorUserId"] = this.authorUserId;
@@ -3582,6 +3577,7 @@ export interface IPostDto {
     categorySlug: string | undefined;
     authorUserName?: string | undefined;
     authorName?: string | undefined;
+    status?: PostStatus;
     categoryId?: string;
     content?: string | undefined;
     authorUserId?: string;
@@ -3605,6 +3601,7 @@ export class PostInListDto implements IPostInListDto {
     categorySlug!: string | undefined;
     authorUserName?: string | undefined;
     authorName?: string | undefined;
+    status?: PostStatus;
 
     constructor(data?: IPostInListDto) {
         if (data) {
@@ -3628,6 +3625,7 @@ export class PostInListDto implements IPostInListDto {
             this.categorySlug = _data["categorySlug"];
             this.authorUserName = _data["authorUserName"];
             this.authorName = _data["authorName"];
+            this.status = _data["status"];
         }
     }
 
@@ -3651,6 +3649,7 @@ export class PostInListDto implements IPostInListDto {
         data["categorySlug"] = this.categorySlug;
         data["authorUserName"] = this.authorUserName;
         data["authorName"] = this.authorName;
+        data["status"] = this.status;
         return data;
     }
 }
@@ -3667,6 +3666,7 @@ export interface IPostInListDto {
     categorySlug: string | undefined;
     authorUserName?: string | undefined;
     authorName?: string | undefined;
+    status?: PostStatus;
 }
 
 export class PostInListDtoPagedResult implements IPostInListDtoPagedResult {
